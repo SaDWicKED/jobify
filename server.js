@@ -1,13 +1,13 @@
 import express from 'express';
+
+import { mongoConnect } from './db/connect.js';
+
 import errorHandlerMiddleware from './middleware/error-handler.js';
 import notFoundMiddleware from './middleware/not-found.js';
-import dotenv from 'dotenv';
 
-dotenv.config()
 const app = express();
 
 app.get('/', (req, res) => {
-  throw new Error('error');
   res.send('Welcome!');
 })
 
@@ -16,6 +16,15 @@ app.use(errorHandlerMiddleware);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, ()=>{
-  console.log(`Server is listening on port ${PORT}...`);
-});
+async function startServer() {
+  try {
+    await mongoConnect();
+    app.listen(PORT, () => {
+      console.log(`listening on port ${PORT}...`)
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+startServer();
