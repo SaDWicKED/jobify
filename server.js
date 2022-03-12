@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 
 import { mongoConnect } from './db/connect.js';
 
@@ -7,6 +8,7 @@ import jobsRouter from './routes/jobsRoutes.js';
 
 import errorHandlerMiddleware from './middleware/error-handler.js';
 import notFoundMiddleware from './middleware/not-found.js';
+
 
 const app = express();
 
