@@ -16,12 +16,12 @@ const reducer = (state, action) => {
         alertType: '',
         alertText: ''
       } 
-    case ActionTypes.REGISTER_USER_BEGIN:
+    case ActionTypes.SETUP_USER_BEGIN:
       return {
         ...state,
         isLoading: true
       } 
-    case ActionTypes.REGISTER_USER_SUCCESS:
+    case ActionTypes.SETUP_USER_SUCCESS:
       return {
         ...state,
         user: action.payload.user,
@@ -31,16 +31,17 @@ const reducer = (state, action) => {
         isLoading: false,
         showAlert: true,
         alertType: 'success',
-        alertText: 'User created! Redirecting...',
+        alertText: action.payload.alertText,
       } 
-    case ActionTypes.REGISTER_USER_ERROR:
+    case ActionTypes.SETUP_USER_ERROR:
       return {
         ...state,
         isLoading: false,
         showAlert: true,
         alertType: 'danger',
         alertText: action.payload.msg,
-      }   
+      }
+    
     default:
       throw new Error(`no such action: ${action.type}`);
   }

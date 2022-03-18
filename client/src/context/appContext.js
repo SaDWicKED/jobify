@@ -46,29 +46,28 @@ const AppProvider = ({children}) => {
     localStorage.removeItem('location');
   }
 
-  const registerUser = async (currentUser) => {
-    dispatch({type: ActionTypes.REGISTER_USER_BEGIN});
-    console.log(currentUser);
+  const setupUser = async ({ currentUser, endPoint, alertText}) => {
+    dispatch({ type: ActionTypes.SETUP_USER_BEGIN });
     try {
-      const response = await axios.post('/api/v1/auth/register', currentUser);
-      // console.log(response);
-      const {user, token, location} = response.data;
+      const { data } = await axios.post(`/api/v1/auth/${endPoint}`, currentUser);
+      const { user, token, location } = data;
+  
       dispatch({
-        type: ActionTypes.REGISTER_USER_SUCCESS,
-        payload: { user, token, location, }
-      });
-      addUserToLocalStorage({user, token, location,});
+        type: ActionTypes.SETUP_USER_SUCCESS,
+        payload: { user, token, location, alertText },
+      })
+  
+      addUserToLocalStorage({ user, token, location });
     } catch (error) {
-      // console.log(error.response);
       dispatch({
-        type: ActionTypes.REGISTER_USER_ERROR,
-        payload: {msg: error.response.data.msg}
-      });
+        type: ActionTypes.SETUP_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      })
     }
     clearAlert();
   }
 
-  return <AppContext.Provider value={{...state, displayAlert, registerUser}}>
+  return <AppContext.Provider value={{...state, displayAlert, setupUser}}>
     {children}
   </AppContext.Provider>
 }
