@@ -1,8 +1,8 @@
 import { 
-  Dashboard, 
   Register, 
   Landing, 
   Error, 
+  ProtectedRoute
 } from './pages';
 import { 
   BrowserRouter, 
@@ -10,17 +10,28 @@ import {
   Route, 
   Link 
 } from 'react-router-dom'
+import {
+  AllJobs,
+  Profile,
+  SharedLayout,
+  Stats,
+  AddJob,
+} from './pages/dashboard'
 
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <Link to='/'>Dashboard</Link>
-        <Link to='/register'>Register</Link>
-        <Link to='/landing'>Home</Link>
-      </nav>
       <Routes>
-        <Route index element={<Dashboard/>} />
+        <Route path='/' element={
+          <ProtectedRoute>
+            <SharedLayout/>
+          </ProtectedRoute>      
+        }>
+          <Route index element={<Stats/>} />
+          <Route path="/all-jobs" element={<AllJobs />} />
+          <Route path="/add-job" element={<AddJob />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
         <Route path="/register" element={<Register/>} />
         <Route path="/landing" element={<Landing />} />
         <Route path="*" element={<Error/>} />
