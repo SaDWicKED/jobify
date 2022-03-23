@@ -1,4 +1,5 @@
 import ActionTypes from './actions';
+import { initialState } from './appContext';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -41,7 +42,19 @@ const reducer = (state, action) => {
         alertType: 'danger',
         alertText: action.payload.msg,
       }
-    
+    case ActionTypes.TOGGLE_SIDEBAR: 
+      return {
+        ...state,
+        showSidebar: !state.showSidebar
+      }
+    case ActionTypes.LOGOUT_USER: 
+      return {
+        ...initialState,
+        user: null,
+        token: null,
+        userLocation: '',
+        jobLocation: '',
+      }  
     default:
       throw new Error(`no such action: ${action.type}`);
   }
