@@ -4,6 +4,7 @@ import Alert from './Alert';
 import Navbar from './Navbar';
 import SmallSidebar from './SmallSidebar';
 import BigSidebar from './BigSidebar';
+import FormRowSelect from './FormRowSelect';
 
 export { 
   Logo,
@@ -11,5 +12,6 @@ export {
   Alert,
   Navbar,
   SmallSidebar,
-  BigSidebar
+  BigSidebar,
+  FormRowSelect
 }
