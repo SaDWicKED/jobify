@@ -19,6 +19,7 @@ const reducer = (state, action) => {
       } 
     case ActionTypes.SETUP_USER_BEGIN:
     case ActionTypes.UPDATE_USER_BEGIN:  
+    case ActionTypes.CREATE_JOB_BEGIN:  
       return {
         ...state,
         isLoading: true
@@ -37,6 +38,7 @@ const reducer = (state, action) => {
       } 
     case ActionTypes.SETUP_USER_ERROR:
     case ActionTypes.UPDATE_USER_ERROR:
+    case ActionTypes.CREATE_JOB_ERROR:
       return {
         ...state,
         isLoading: false,
@@ -68,7 +70,31 @@ const reducer = (state, action) => {
         showAlert: true,
         alertType: 'success',
         alertText: 'User Profile Updated!',
-      }   
+      }
+    case ActionTypes.HANDLE_CHANGE:
+      return {
+        ...state,
+        [action.payload.name]:action.payload.value
+      }
+    case ActionTypes.CLEAR_VALUES:
+      return {
+        ...state,
+        isEditing: false,
+        editJobId: '',
+        position: '',
+        company: '',
+        jobLocation: state.userLocation,
+        jobType: 'full-time',
+        status: 'pending'
+      }
+    case ActionTypes.CREATE_JOB_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        showAlert: true,
+        alertType: 'success',
+        alertText: 'New Job Created!',
+      }     
     default:
       throw new Error(`no such action: ${action.type}`);
   }
