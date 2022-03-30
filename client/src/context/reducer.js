@@ -19,7 +19,9 @@ const reducer = (state, action) => {
       } 
     case ActionTypes.SETUP_USER_BEGIN:
     case ActionTypes.UPDATE_USER_BEGIN:  
-    case ActionTypes.CREATE_JOB_BEGIN:  
+    case ActionTypes.CREATE_JOB_BEGIN:
+    case ActionTypes.DELETE_JOB_BEGIN:  
+    case ActionTypes.EDIT_JOB_BEGIN:  
       return {
         ...state,
         isLoading: true
@@ -45,6 +47,7 @@ const reducer = (state, action) => {
     case ActionTypes.SETUP_USER_ERROR:
     case ActionTypes.UPDATE_USER_ERROR:
     case ActionTypes.CREATE_JOB_ERROR:
+    case ActionTypes.EDIT_JOB_ERROR:
       return {
         ...state,
         isLoading: false,
@@ -121,7 +124,15 @@ const reducer = (state, action) => {
         jobLocation,
         jobType,
         status
-      }     
+      }
+     case ActionTypes.EDIT_JOB_SUCCESS:
+       return {
+         ...state,
+         isLoading: false,
+         showAlert: true,
+         alertType: 'success',
+         alertText: 'Job Updated!',
+       }        
     default:
       throw new Error(`no such action: ${action.type}`);
   }

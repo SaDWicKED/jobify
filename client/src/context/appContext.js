@@ -215,12 +215,38 @@ const AppProvider = ({children}) => {
     dispatch({type: ActionTypes.SET_EDIT_JOB, payload: { id }});
   }
   
-  const editJob = () => {
-    console.log('edit job');
+  const editJob = async () => {
+    dispatch({ type: ActionTypes.EDIT_JOB_BEGIN });
+
+    try {
+      const { position, company, jobLocation, jobType, status } = state
+      await authFetch.patch(`/jobs/${state.editJobId}`, {
+        company,
+        position,
+        jobLocation,
+        jobType,
+        status,
+      });
+      dispatch({ type: ActionTypes.EDIT_JOB_SUCCESS });
+      dispatch({ type: ActionTypes.CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: ActionTypes.EDIT_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      })
+    }
+    clearAlert();
   }
 
-  const deleteJob = id => {
-    console.log(id);
+  const deleteJob = async (jobId) => {
+    dispatch({ type: ActionTypes.DELETE_JOB_BEGIN })
+    try {
+      await authFetch.delete(`/jobs/${jobId}`);
+      getJobs();
+    } catch (error) {
+      logoutUser();
+    }
   }
 
   return <AppContext.Provider 
