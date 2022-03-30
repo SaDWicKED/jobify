@@ -25,6 +25,17 @@ const initialState = {
   jobType: 'full-time',
   statusOptions: ['interview', 'declined', 'pending'],
   status: 'pending',
+  jobs: [],
+  totalJobs: 0,
+  numOfPages: 1,
+  page: 1,
+  stats: {},
+  monthlyApplications: [],
+  search: '',
+  searchStatus: 'all',
+  searchType: 'all',
+  sort: 'latest',
+  sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
 }
 
 const AppContext = React.createContext();
@@ -178,6 +189,40 @@ const AppProvider = ({children}) => {
     clearAlert();
   }
 
+  const getJobs = async () => {
+    let url = `/jobs`;
+
+    dispatch({type: ActionTypes.GET_JOBS_BEGIN});
+    try {
+      const { data } = await authFetch(url);
+      const { jobs, totalJobs, numOfPages } = data;
+      dispatch({
+        type: ActionTypes.GET_JOBS_SUCCESS,
+        payload: {
+          jobs,
+          totalJobs,
+          numOfPages,
+        }
+      })
+    } catch (error) {
+      console.log(error.response);
+      logoutUser();
+    }
+    clearAlert();
+  }
+
+  const setEditJob = id => {
+    dispatch({type: ActionTypes.SET_EDIT_JOB, payload: { id }});
+  }
+  
+  const editJob = () => {
+    console.log('edit job');
+  }
+
+  const deleteJob = id => {
+    console.log(id);
+  }
+
   return <AppContext.Provider 
     value={{
       ...state, 
@@ -189,11 +234,17 @@ const AppProvider = ({children}) => {
       handleChange,
       clearValues,
       createJob,
+      getJobs,
+      setEditJob,
+      deleteJob,
+      editJob
     }}
   >
     {children}
   </AppContext.Provider>
 }
+
+
 
 const useAppContext = () => {
   return useContext(AppContext);
