@@ -84,6 +84,7 @@ const reducer = (state, action) => {
     case ActionTypes.HANDLE_CHANGE:
       return {
         ...state,
+        page:1,
         [action.payload.name]:action.payload.value
       }
     case ActionTypes.CLEAR_VALUES:
@@ -141,6 +142,19 @@ const reducer = (state, action) => {
         stats: action.payload.stats,
         monthlyApplications: action.payload.monthlyApplications
       }
+    case ActionTypes.CLEAR_FILTERS: 
+      return {
+        ...state,
+        search: '',
+        searchStatus: 'all',
+        searchType: 'all',
+        sort: 'latest',
+      }
+    case ActionTypes.CHANGE_PAGE:
+      return {
+        ...state,
+        page: action.payload.page
+      }    
     default:
       throw new Error(`no such action: ${action.type}`);
   }

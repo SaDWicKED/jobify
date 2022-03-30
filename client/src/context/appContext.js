@@ -190,9 +190,13 @@ const AppProvider = ({children}) => {
   }
 
   const getJobs = async () => {
-    let url = `/jobs`;
+    const { page, search, searchStatus, searchType, sort } = state;
 
-    dispatch({type: ActionTypes.GET_JOBS_BEGIN});
+    let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    if (search) {
+      url = url + `&search=${search}`;
+    }
+    dispatch({ type: ActionTypes.GET_JOBS_BEGIN })
     try {
       const { data } = await authFetch(url);
       const { jobs, totalJobs, numOfPages } = data;
@@ -202,10 +206,9 @@ const AppProvider = ({children}) => {
           jobs,
           totalJobs,
           numOfPages,
-        }
-      })
+        },
+      });
     } catch (error) {
-      console.log(error.response);
       logoutUser();
     }
     clearAlert();
@@ -266,6 +269,14 @@ const AppProvider = ({children}) => {
     clearAlert();
   }
 
+  const clearFilters = () => {
+    dispatch({ type: ActionTypes.CLEAR_FILTERS })
+  }
+
+  const changePage = (page) => {
+    dispatch({ type: ActionTypes.CHANGE_PAGE, payload: { page } })
+  }
+
   return <AppContext.Provider 
     value={{
       ...state, 
@@ -281,7 +292,9 @@ const AppProvider = ({children}) => {
       setEditJob,
       deleteJob,
       editJob,
-      showStats
+      showStats,
+      clearFilters,
+      changePage
     }}
   >
     {children}
