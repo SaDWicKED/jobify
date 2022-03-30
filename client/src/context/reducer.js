@@ -27,6 +27,7 @@ const reducer = (state, action) => {
         isLoading: true
       } 
     case ActionTypes.GET_JOBS_BEGIN:  
+    case ActionTypes.SHOW_STATS_BEGIN:  
       return {
         ...state,
         isLoading: true,
@@ -125,14 +126,21 @@ const reducer = (state, action) => {
         jobType,
         status
       }
-     case ActionTypes.EDIT_JOB_SUCCESS:
-       return {
-         ...state,
-         isLoading: false,
-         showAlert: true,
-         alertType: 'success',
-         alertText: 'Job Updated!',
-       }        
+    case ActionTypes.EDIT_JOB_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        showAlert: true,
+        alertType: 'success',
+        alertText: 'Job Updated!',
+      }
+    case ActionTypes.SHOW_STATS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        stats: action.payload.stats,
+        monthlyApplications: action.payload.monthlyApplications
+      }
     default:
       throw new Error(`no such action: ${action.type}`);
   }

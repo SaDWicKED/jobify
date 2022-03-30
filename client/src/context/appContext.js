@@ -240,13 +240,30 @@ const AppProvider = ({children}) => {
   }
 
   const deleteJob = async (jobId) => {
-    dispatch({ type: ActionTypes.DELETE_JOB_BEGIN })
+    dispatch({ type: ActionTypes.DELETE_JOB_BEGIN });
     try {
       await authFetch.delete(`/jobs/${jobId}`);
       getJobs();
     } catch (error) {
       logoutUser();
     }
+  }
+
+  const showStats = async () => {
+    dispatch({ type: ActionTypes.SHOW_STATS_BEGIN });
+    try {
+      const { data } = await authFetch('/jobs/stats');
+      dispatch({
+        type: ActionTypes.SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyApplications: data.monthlyApplications,
+        },
+      });
+    } catch (error) {
+      logoutUser();
+    }
+    clearAlert();
   }
 
   return <AppContext.Provider 
@@ -263,7 +280,8 @@ const AppProvider = ({children}) => {
       getJobs,
       setEditJob,
       deleteJob,
-      editJob
+      editJob,
+      showStats
     }}
   >
     {children}
